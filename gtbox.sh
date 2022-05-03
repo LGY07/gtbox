@@ -77,17 +77,15 @@ plugin-add () {
     exit 1
     fi
 
-
     #Move to /opt/gtbox/
     mkdir /opt/gtbox/$PKG_NAME
     cp ~/$1-cache /opt/$PKG_NAME
     rm -rf ~/$1-cache
 
     #Add to list
-    echo "$PKG_SHELL">>/opt/gtbox/$PKG_NAME/shell.cfg
     echo "$PKG_NAME">>/opt/gtbox/toollist
     echo "$PKG_INFO">>/opt/gtbox/toollist
-    echo "$PKG_NAME:/opt/gtbox/$PKG_NAME/$PKG_START">>/opt/gtbox/startlist
+    echo "$PKG_NAME:$PKG_START">>/opt/gtbox/startlist
 }
 
 
@@ -104,7 +102,7 @@ MAIN () {
     echo -e "\e[34mGrass!-Toolbox\e[0m"
     read -p "()" $__RUN
     if [[ $(grep "^$__RUN#" /opt/gtbox/startlist | wc -l) -eq 1 ]];then
-    $(cat /opt/gtbox/$__RUN/shell) $(grep "^$__RUN:" /opt/gtbox/startlist | sed s/$__RUN#//)
+    $(grep "^$__RUN:" /opt/gtbox/startlist | sed s/$__RUN://)
     elif [[ $__RUN = "help" ]];then
     HELP
     else $__RUN
