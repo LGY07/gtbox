@@ -9,7 +9,7 @@ less-help () {
     echo "This is an interactive script,if no args are added, the default interaction mode."
 }
 
-root () {
+ROOT () {
     if [[ $(whoami) != "root" ]];then 
     su -c "$0"
     fi
@@ -88,11 +88,19 @@ plugin-add () {
     echo "$PKG_NAME:$PKG_START">>/opt/gtbox/startlist
 }
 
-
 ARGS () {
     if [[ $1 == "--help" || $1 == "-h" ]];then
     less-help
     fi
+}
+
+INSTALL () {
+    ROOT
+    mkdir /opt > /dev/null
+    mkdir /opt/gtbox > /dev/null
+    cp $0 /opt/gtbox/gtbox.sh > /dev/null
+    ln -sf /opt/gtbox/gtbox.sh /usr/bin/gtbox > /dev/null
+    return 0
 }
 
 MAIN () {
