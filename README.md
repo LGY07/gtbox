@@ -19,7 +19,7 @@ cd ./gtbox
 ```
 ###### ssh
 ```
-git clone https://github.com/LGY07/gtbox.git
+git clone git@github.com:LGY07/gtbox.git
 cd ./gtbox
 ```
 安装
