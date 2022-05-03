@@ -98,15 +98,6 @@ ARGS () {
     return 0
 }
 
-INSTALL () {
-    ROOT
-    mkdir /opt > /dev/null
-    mkdir /opt/gtbox > /dev/null
-    cp $0 /opt/gtbox/gtbox.sh > /dev/null
-    ln -sf /opt/gtbox/gtbox.sh /usr/bin/gtbox > /dev/null
-    return 0
-}
-
 MAIN () {
     __EXIT=0
     while [[ $__EXIT -eq 0 ]]
