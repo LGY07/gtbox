@@ -35,6 +35,11 @@ plugin-add () {
     root && plugin-add
     if test -f $1;then
     tar -xf $1 ~/$1-cache
+
+    $PKG_NAME = $(grep "^architecture-" ~/$1-cache/plugin.cfg | sed 's/architecture-//')
+    $PKG_ARCHITECTURE = $(grep "^architecture-" ~/$1-cache/plugin.cfg | sed 's/architecture-//')
+    
+
     if [[ $(uname -m) == $(grep "^architecture-" ~/$1-cache/plugin.cfg | sed 's/architecture-//') || $(grep "^architecture-" ~/$1-cache/plugin.cfg | sed 's/architecture-//') == "all" ]];then echo "Check architecture [OK]";else echo "Check architecture [ERROR]" & exit 1;fi
     if [[ $(uname -o) == $(grep "^architecture-" ~/$1-cache/plugin.cfg | sed 's/architecture-//') || $(grep "^OS-" ~/$1-cache/plugin.cfg | sed 's/OS-//') == "all" ]];then echo "Check OS [OK]";else echo "Check OS [ERROR]" & exit 1;fi
     hash $(grep "^shell-" ~/$1-cache/plugin.cfg | sed 's/shell-//') > /dev/null 2>&1
@@ -44,8 +49,8 @@ plugin-add () {
     echo "$(grep "^name-" ~/$1-cache/plugin.cfg | sed 's/name-//'):">>/opt/gtbox/toollist
     echo "$(grep "^info-" ~/$1-cache/plugin.cfg | sed 's/info-//')">>/opt/gtbox/toollist
     echo "$(grep "^start-" ~/$1-cache/plugin.cfg | sed 's/start-//')#/opt/gtbox/$(grep "^name-" ~/$1-cache/plugin.cfg | sed 's/name-//')/$(grep "^start-" ~/$1-cache/plugin.cfg | sed 's/start-//')">>/opt/gtbox/startlist
-    cp ~/$1 /opt/$(grep "^name-" ~/$1-cache/plugin.cfg | sed 's/name-//')
-    rm -rf ~/$1
+    cp ~/$1-cache /opt/$(grep "^name-" ~/$1-cache/plugin.cfg | sed 's/name-//')
+    rm -rf ~/$1-cache
 }
 
 install-gtbox () {
