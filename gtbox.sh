@@ -112,5 +112,5 @@ MAIN () {
     done
 }
 
-ARGS
+ARGS $*
 MAIN
