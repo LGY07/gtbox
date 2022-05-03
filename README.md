@@ -12,8 +12,14 @@ sudo bash ./install-online.sh
 ```
 #### 离线安装
 克隆本项目并进入目录
+###### http
 ```
-git clone 
+git clone https://github.com/LGY07/gtbox.git
+cd ./gtbox
+```
+###### ssh
+```
+git clone https://github.com/LGY07/gtbox.git
 cd ./gtbox
 ```
 安装
