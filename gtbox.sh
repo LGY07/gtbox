@@ -7,12 +7,14 @@ less-help () {
     echo "-h    --help      display a helpful usage message"
     echo ""
     echo "This is an interactive script,if no args are added, the default interaction mode."
+    return 0
 }
 
 ROOT () {
     if [[ $(whoami) != "root" ]];then 
     su -c "$0"
     fi
+    return 0
 }
 
 HELP () {
@@ -86,12 +88,14 @@ plugin-add () {
     echo "$PKG_NAME">>/opt/gtbox/toollist
     echo "$PKG_INFO">>/opt/gtbox/toollist
     echo "$PKG_NAME:$PKG_START">>/opt/gtbox/startlist
+    return 0
 }
 
 ARGS () {
     if [[ $1 == "--help" || $1 == "-h" ]];then
     less-help
     fi
+    return 0
 }
 
 INSTALL () {
@@ -116,6 +120,7 @@ MAIN () {
     else $__RUN
     fi
     done
+    return 0
 }
 
 ARGS $*
