@@ -15,7 +15,7 @@ root () {
     fi
 }
 
-help () {
+HELP () {
     echo -e "\e[34mBasic tools\e[0m"
     echo ""
     echo "help:"
@@ -27,6 +27,7 @@ help () {
     echo "plugin-update [plugin-name]"
     echo "Update a plugin"
     echo "plugin-config:"
+    return 0
 }
 
 plugin-add () {
@@ -50,10 +51,10 @@ plugin-add () {
     fi
 
     #Check Configuration
-    if [ $(grep "^name-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
-    if [ $(grep "^info-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
-    if [ $(grep "^shell-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
-    if [ $(grep "^start-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^name-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^info-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^shell-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^start-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
 
     #Vars
     $PKG_NAME = $(grep "^name-" ~/$1-cache/plugin.cfg | sed 's/name-//')
@@ -65,9 +66,10 @@ plugin-add () {
     if [ $(grep "^$PKG_NAME" /opt/gtbox/startlist | wc -l) -eq 1 ];then
     echo -e "\033[31mPlugin name duplication\033[0m" & exit 1
     fi
+
     #Check shell
     hash $PKG_SHELL > /dev/null 2>&1
-    if [ "$?" == "0" ];then
+    if [[ "$?" == "0" ]];then
     echo -e "\033[32m[OK]\033[0m Check shell"
     else
     echo -e "\033[31m[ERROR]\033[0mCheck shell"
@@ -85,19 +87,30 @@ plugin-add () {
     echo "$PKG_SHELL">>/opt/gtbox/$PKG_NAME/shell.cfg
     echo "$PKG_NAME">>/opt/gtbox/toollist
     echo "$PKG_INFO">>/opt/gtbox/toollist
-    echo "$PKG_START">>/opt/gtbox/startlist
+    echo "$PKG_NAME:/opt/gtbox/$PKG_NAME/$PKG_START">>/opt/gtbox/startlist
 }
 
 
 ARGS () {
-
+    if [[ $1 == "--help" || $1 == "-h" ]];then
+    less-help
+    fi
 }
 
 MAIN () {
+    __EXIT=0
+    while [[ $__EXIT -eq 0 ]]
+    do
     echo -e "\e[34mGrass!-Toolbox\e[0m"
-    read -p "()" $__run
-    if [[ $(grep "^$__run#" /opt/gtbox/startlist | wc -l) -eq 1 ]];then
-    $(cat /opt/gtbox/$__run/shell) $(grep "^$__run#" /opt/gtbox/startlist | sed s/$__run#//)
-    else $__run
+    read -p "()" $__RUN
+    if [[ $(grep "^$__RUN#" /opt/gtbox/startlist | wc -l) -eq 1 ]];then
+    $(cat /opt/gtbox/$__RUN/shell) $(grep "^$__RUN:" /opt/gtbox/startlist | sed s/$__RUN#//)
+    elif [[ $__RUN = "help" ]];then
+    HELP
+    else $__RUN
     fi
+    done
 }
+
+ARGS
+MAIN
