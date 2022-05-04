@@ -12,13 +12,6 @@ LESS_HELP () {
     return 0
 }
 
-ROOT () {
-    if [[ $(whoami) != "root" ]];then 
-    sudo /opt/gtbox/gtbox.sh
-    fi
-    return 0
-}
-
 CHECK_wget () {
 hash wget > /dev/null 2>&1
 if [ "$?" != "0" ]; then
@@ -26,8 +19,6 @@ if [ "$?" != "0" ]; then
     echo -e "\033[33mDo you want to try installing wget?\033[0m"
     read -p "[Y/n](default=n)" install
     if [[ $install == "Y" || $install == "y" ]];then
-        if [[ $(uname -o) == "Android" ]];then apt-get update -y;apt-get install wget -y
-        fi
         hash dnf > /dev/null 2>&1
         if [ "$?" == "0" ]; then dnf check-update -y;sudo dnf install wget -y
         fi
@@ -49,8 +40,6 @@ if [ "$?" != "0" ]; then
     echo -e "\033[33mDo you want to try installing tar?\033[0m"
     read -p "[Y/n](default=n)" install
     if [[ $install == "Y" || $install == "y" ]];then
-        if [[ $(uname -o) == "Android" ]];then apt-get update -y;apt-get install tar -y
-        fi
         hash dnf > /dev/null 2>&1
         if [ "$?" == "0" ]; then dnf check-update -y;sudo dnf install tar -y
         fi
@@ -87,7 +76,8 @@ help () {
 plugin-add () {
     echo -e "\e[34mInstall a plugin\e[0m"
     echo -e "This command requires root privileges"
-    ROOT && plugin-add $*
+    CHECK_tar
+    sudo su - && plugin-add $*
     #Check file
     if test -f $1;then
     ADD_PATH=$(tar -tf $1 | grep "plugin.cfg")
@@ -145,7 +135,7 @@ plugin-add () {
 
 plugin-remove () {
     echo -e "\e[34mRemove a plugin $1\e[0m"
-    ROOT && plugin-remove $*
+    sudo su - && plugin-remove $*
     if [[ 1 -gt $(grep "^$1:" /opt/gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
     read -p "[Y/n]" TRUE_FALSE
     if [[ $TRUE_FALSE == "N" || $TRUE_FALSE == "n" ]];then exit 1
@@ -173,7 +163,8 @@ plugin-make () {
     echo -e "\e[34mMake a plugin package\e[0m"
     else exit 1
     fi
-    ROOT && plugin-make $*
+    sudo su - && plugin-make $*
+    CHECK_tar
     echo -e "\e[36mMake a configuration file\e[0m"
     echo "Cautions:"
     echo "1.Please note the path,the plugin will be installed to /opt/gtbox/[plugin name]/"
@@ -250,7 +241,7 @@ MAIN () {
     if [[ $(grep "^$__RUN:" /opt/gtbox/startlist | wc -l) -eq 1 ]];then
     $(grep "^$__RUN:" /opt/gtbox/startlist | sed s/$__RUN://)
     elif [[ $__RUN == "exit" ]]; 
-    then echo -e "\033[31mGood bye!\033[0m" & exit 0
+    then echo -e "\033[31mGood bye!\033[0m" & __EXIT=1
     else
     $__RUN
     fi
@@ -260,4 +251,5 @@ MAIN () {
 
 ARGS $*
 if [[ $? = 1 ]];then exit 0;fi
+echo "Enter help for help"
 MAIN
