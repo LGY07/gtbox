@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# v1.0
+
 LESS_HELP () {
     echo -e "\e[34mGrass!-Toolbox\e[0m"
     echo "usage: $0 [options] COMMAND"
