@@ -188,8 +188,10 @@ PLUGIN_MAKE () {
 ARGS () {
     if [[ $1 == "--help" || $1 == "-h" ]];then
     LESS_HELP
-    fi
     return 1
+    else
+    return 0
+    fi
 }
 
 MAIN () {
