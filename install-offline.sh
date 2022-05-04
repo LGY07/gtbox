@@ -1,4 +1,5 @@
 #!/bin/bash
+#Grass!-Toolbox
 if [[ $(whoami) != "root" ]];then
 sudo bash $0
 fi
