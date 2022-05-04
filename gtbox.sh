@@ -90,31 +90,32 @@ plugin-add () {
     ROOT && plugin-add $*
     #Check file
     if test -f $1;then
-    tar -xf $1 ~/$1-cache
+    ADD_PATH=$(tar -tf $1 | grep "plugin.cfg")
+    tar -xf $1 -C ~/
     else exit 1
     fi
     #Check architecture
-    if [[ $(uname -m) == $(grep "^architecture-" ~/$1-cache/plugin.cfg | sed 's/architecture-//') || $(grep "^architecture-" ~/$1-cache/plugin.cfg | sed 's/architecture-//') == "all" ]];then
+    if [[ $(uname -m) == $(grep "^architecture-" ~/$ADD_PATH | sed 's/architecture-//') || $(grep "^architecture-" ~/$ADD_PATH | sed 's/architecture-//') == "all" ]];then
     echo -e "\033[32m[OK]\033[0m Check architecture"
     else echo -e "\033[31m[ERROR]\033[0mCheck architecture" & exit 1
     fi
     #Check OS
-    if [[ $(uname -o) == $(grep "^OS-" ~/$1-cache/plugin.cfg | sed 's/OS-//') || $(grep "^OS-" ~/$1-cache/plugin.cfg | sed 's/OS-//') == "all" ]];then
+    if [[ $(uname -o) == $(grep "^OS-" ~/$ADD_PATH | sed 's/OS-//') || $(grep "^OS-" ~/$ADD_PATH | sed 's/OS-//') == "all" ]];then
     echo -e "\033[32m[OK]\033[0m Check OS"
     else echo -e "\033[31m[ERROR]\033[0mCheck OS" & exit 1
     fi
 
     #Check Configuration
-    if [[ $(grep "^name-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
-    if [[ $(grep "^info-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
-    if [[ $(grep "^shell-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
-    if [[ $(grep "^start-" ~/$1-cache/plugin.cfg | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^name-" ~/$ADD_PATH | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^info-" ~/$ADD_PATH | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^shell-" ~/$ADD_PATH | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
+    if [[ $(grep "^start-" ~/$ADD_PATH | wc -l) -ne 1 ]];then echo -e "\033[31mThe configuration file is wrong\033[0m" & exit 1;fi
 
     #Vars
-    PKG_NAME=$(grep "^name-" ~/$1-cache/plugin.cfg | sed 's/name-//')
-    PKG_INFO=$(grep "^info-" ~/$1-cache/plugin.cfg | sed 's/info-//')
-    PKG_SHELL=$(grep "^shell-" ~/$1-cache/plugin.cfg | sed 's/shell-//')
-    PKG_START=$(grep "^start-" ~/$1-cache/plugin.cfg | sed 's/start-//')
+    PKG_NAME=$(grep "^name-" ~/$ADD_PATH | sed 's/name-//')
+    PKG_INFO=$(grep "^info-" ~/$ADD_PATH | sed 's/info-//')
+    PKG_SHELL=$(grep "^shell-" ~/$ADD_PATH | sed 's/shell-//')
+    PKG_START=$(grep "^start-" ~/$ADD_PATH | sed 's/start-//')
 
     #Check name
     if [ $(grep "^$PKG_NAME" /opt/gtbox/startlist | wc -l) -eq 1 ];then
