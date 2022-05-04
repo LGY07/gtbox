@@ -14,7 +14,7 @@ LESS_HELP () {
 
 ROOT () {
     if [[ $(whoami) != "root" ]];then 
-    su -c "$0"
+    sudo "$0 $*"
     fi
     return 0
 }
