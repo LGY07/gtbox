@@ -117,6 +117,7 @@ PLUGIN_UPDATE () {
     if [[ $TRUE_FALSE == "N" || $TRUE_FALSE == "n" ]];then exit 1
     else
     PLUGIN-REMOVE $1 && PLUGIN_ADD $2
+    fi
     return 0
 }
 
