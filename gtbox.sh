@@ -145,6 +145,7 @@ PLUGIN_MAKE () {
     if [[ $MAKE_PKG_IN1 -eq 2 ]];then MAKE_PKG_UNAMEM=$(uname -m)
     elif [[ $MAKE_PKG_IN1 -eq 3 ]];then read -p "Enter the architecture:" MAKE_PKG_UNAMEM
     else MAKE_PKG_UNAMEM=all
+    fi
     #OS
     echo "Select the OS in which the plugin can run:"
     echo "1:all"
@@ -155,14 +156,16 @@ PLUGIN_MAKE () {
     if [[ $MAKE_PKG_IN2 -eq 2 ]];then MAKE_PKG_UNAMEM=$(uname -o)
     elif [[ $MAKE_PKG_IN2 -eq 3 ]];then read -p "Enter the OS:" MAKE_PKG_UNAMEO
     else MAKE_PKG_UNAMEM=all
+    fi
     #Shell
     echo "Select the interpreter in which the plugin can run:"
     echo "1:bash"
     echo "2:Other"
     echo -e "\e[35m(default=1)\e[0m"
     read -p "Enter the number:" MAKE_PKG_IN3
-    elif [[ $MAKE_PKG_IN3 -eq 2 ]];then read -p "Enter the OS:" MAKE_PKG_SHELL
+    if [[ $MAKE_PKG_IN3 -eq 2 ]];then read -p "Enter the OS:" MAKE_PKG_SHELL
     else MAKE_PKG_UNAMEM=bash
+    fi
     #Start command
     echo "The script start command (absolute path), should be in the /opt/gtbox/$MAKE_PKG_NAME/ directory"
     echo "For example:bash /opt/gtbox/$MAKE_PKG_NAME/start.sh"
