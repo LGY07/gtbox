@@ -14,14 +14,59 @@ LESS_HELP () {
 
 ROOT () {
     if [[ $(whoami) != "root" ]];then 
-    sudo "$0 $*"
+    sudo /opt/gtbox/gtbox.sh
     fi
     return 0
 }
 
+CHECK_wget () {
+hash wget > /dev/null 2>&1
+if [ "$?" != "0" ]; then
+    echo -e "\033[31mERROR:\033[0mPlease make sure wget is installed"
+    echo -e "\033[33mDo you want to try installing wget?\033[0m"
+    read -p "[Y/n](default=n)" install
+    if [[ $install == "Y" || $install == "y" ]];then
+        if [[ $(uname -o) == "Android" ]];then apt-get update -y;apt-get install wget -y
+        fi
+        hash dnf > /dev/null 2>&1
+        if [ "$?" == "0" ]; then dnf check-update -y;sudo dnf install wget -y
+        fi
+        hash pacman > /dev/null 2>&1
+        if [ "$?" == "0" ]; then sudo pacman -Sy wget --noconfirm
+        fi
+        hash apt-get > /dev/null 2>&1
+        if [ "$?" == "0" ]; then apt-get update -y;sudo apt-get install wget -y
+        fi
+    fi
+exit
+fi
+}
+
+CHECK_tar () {
+hash tar > /dev/null 2>&1
+if [ "$?" != "0" ]; then
+    echo -e "\033[31mERROR:\033[0mPlease make sure tar is installed"
+    echo -e "\033[33mDo you want to try installing tar?\033[0m"
+    read -p "[Y/n](default=n)" install
+    if [[ $install == "Y" || $install == "y" ]];then
+        if [[ $(uname -o) == "Android" ]];then apt-get update -y;apt-get install tar -y
+        fi
+        hash dnf > /dev/null 2>&1
+        if [ "$?" == "0" ]; then dnf check-update -y;sudo dnf install tar -y
+        fi
+        hash pacman > /dev/null 2>&1
+        if [ "$?" == "0" ]; then sudo pacman -Sy tar --noconfirm
+        fi
+        hash apt-get > /dev/null 2>&1
+        if [ "$?" == "0" ]; then apt-get update -y;sudo apt-get install tar -y
+        fi
+    fi
+exit
+fi
+}
+
 help () {
     echo -e "\e[34mBasic tools\e[0m"
-    echo ""
     echo "help:"
     echo "Show a helpful usage message."
     echo "plugin-add [package]:"
@@ -35,6 +80,7 @@ help () {
     echo ""
     echo -e "\e[34mPlugin tools\e[0m"
     cat /opt/gtbox/toollist
+    echo ""
     return 0
 }
 
@@ -202,6 +248,8 @@ MAIN () {
     read -p "()" __RUN
     if [[ $(grep "^$__RUN:" /opt/gtbox/startlist | wc -l) -eq 1 ]];then
     $(grep "^$__RUN:" /opt/gtbox/startlist | sed s/$__RUN://)
+    elif [[ $__RUN == "exit" ]]; 
+    then echo -e "\033[31mGood bye!\033[0m" & exit 0
     else
     $__RUN
     fi
