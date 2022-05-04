@@ -19,7 +19,7 @@ ROOT () {
     return 0
 }
 
-HELP () {
+help () {
     echo -e "\e[34mBasic tools\e[0m"
     echo ""
     echo "help:"
@@ -38,10 +38,10 @@ HELP () {
     return 0
 }
 
-PLUGIN_ADD () {
+plugin-add () {
     echo -e "\e[34mInstall a plugin\e[0m"
     echo -e "This command requires root privileges"
-    ROOT && PLUGIN_ADD $*
+    ROOT && plugin-add $*
     #Check file
     if test -f $1;then
     tar -xf $1 ~/$1-cache
@@ -96,9 +96,9 @@ PLUGIN_ADD () {
     return 0
 }
 
-PLUGIN_REMOVE () {
+plugin-remove () {
     echo -e "\e[34mRemove a plugin $1\e[0m"
-    ROOT && PLUGIN_REMOVE $*
+    ROOT && plugin-remove $*
     if [[ 1 -gt $(grep "^$1:" /opt/gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
     read -p "[Y/n]" TRUE_FALSE
     if [[ $TRUE_FALSE == "N" || $TRUE_FALSE == "n" ]];then exit 1
@@ -110,23 +110,23 @@ PLUGIN_REMOVE () {
     return 0
 }
 
-PLUGIN_UPDATE () {
+plugin-update () {
     echo -e "\e[34mUpdate a plugin $1\e[0m"
     if [[ 1 -gt $(grep "^$1:" /opt/gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
     read -p "[Y/n]" TRUE_FALSE
     if [[ $TRUE_FALSE == "N" || $TRUE_FALSE == "n" ]];then exit 1
     else
-    PLUGIN-REMOVE $1 && PLUGIN_ADD $2
+    plugin-remove $1 && plugin-add $2
     fi
     return 0
 }
 
-PLUGIN_MAKE () {
+plugin-make () {
     if test -d $1 ;then
     echo -e "\e[34mMake a plugin package\e[0m"
     else exit 1
     fi
-    ROOT && PLUGIN_MAKE $*
+    ROOT && plugin-make $*
     echo -e "\e[36mMake a configuration file\e[0m"
     echo "Cautions:"
     echo "1.Please note the path,the plugin will be installed to /opt/gtbox/[plugin name]/"
@@ -199,7 +199,7 @@ MAIN () {
     while [[ $__EXIT -eq 0 ]]
     do
     echo -e "\e[34mGrass!-Toolbox\e[0m"
-    read -p "()" $__RUN
+    read -p "()" __RUN
     if [[ $(grep "^$__RUN:" /opt/gtbox/startlist | wc -l) -eq 1 ]];then
     $(grep "^$__RUN:" /opt/gtbox/startlist | sed s/$__RUN://)
     else
