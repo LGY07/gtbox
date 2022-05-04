@@ -77,7 +77,7 @@ plugin-add () {
     echo -e "\e[34mInstall a plugin\e[0m"
     echo -e "This command requires root privileges"
     CHECK_tar
-    sudo su - && plugin-add $*
+    if [[ $(whoami) != "root" ]];then echo -e "\033[31mPermission denied\033[0m" & exit 1;fi
     #Check file
     if test -f $1;then
     ADD_PATH=$(tar -tf $1 | grep "plugin.cfg")
@@ -135,7 +135,7 @@ plugin-add () {
 
 plugin-remove () {
     echo -e "\e[34mRemove a plugin $1\e[0m"
-    sudo su - && plugin-remove $*
+    if [[ $(whoami) != "root" ]];then echo -e "\033[31mPermission denied\033[0m" & exit 1;fi
     if [[ 1 -gt $(grep "^$1:" /opt/gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
     read -p "[Y/n]" TRUE_FALSE
     if [[ $TRUE_FALSE == "N" || $TRUE_FALSE == "n" ]];then exit 1
@@ -163,7 +163,7 @@ plugin-make () {
     echo -e "\e[34mMake a plugin package\e[0m"
     else exit 1
     fi
-    sudo su - && plugin-make $*
+    if [[ $(whoami) != "root" ]];then echo -e "\033[31mPermission denied\033[0m" & exit 1;fi
     CHECK_tar
     echo -e "\e[36mMake a configuration file\e[0m"
     echo "Cautions:"
@@ -191,9 +191,9 @@ plugin-make () {
     echo "3:Other"
     echo -e "\e[35m(default=1)\e[0m"
     read -p "Enter the number:" MAKE_PKG_IN2
-    if [[ $MAKE_PKG_IN2 -eq 2 ]];then MAKE_PKG_UNAMEM=$(uname -o)
+    if [[ $MAKE_PKG_IN2 -eq 2 ]];then MAKE_PKG_UNAMEO=$(uname -o)
     elif [[ $MAKE_PKG_IN2 -eq 3 ]];then read -p "Enter the OS:" MAKE_PKG_UNAMEO
-    else MAKE_PKG_UNAMEM=all
+    else MAKE_PKG_UNAMEO=all
     fi
     #Shell
     echo "Select the interpreter in which the plugin can run:"
@@ -202,7 +202,7 @@ plugin-make () {
     echo -e "\e[35m(default=1)\e[0m"
     read -p "Enter the number:" MAKE_PKG_IN3
     if [[ $MAKE_PKG_IN3 -eq 2 ]];then read -p "Enter the OS:" MAKE_PKG_SHELL
-    else MAKE_PKG_UNAMEM=bash
+    else MAKE_PKG_SHELL=bash
     fi
     #Start command
     echo "The script start command (absolute path), should be in the /opt/gtbox/$MAKE_PKG_NAME/ directory"
