@@ -3,7 +3,7 @@
 if [[ $(whoami) != "root" ]];then
 sudo bash $0
 fi
-mkdir -p /opt/gtbox > /dev/null
-cp ./gtbox.sh /opt/gtbox/gtbox.sh
-chmod 555 /opt/gtbox/
-ln -sf /opt/gtbox/gtbox.sh /usr/bin/gtbox
+mkdir /gtbox > /dev/null
+cp ./gtbox.sh /gtbox/gtbox.sh
+chmod 555 /gtbox/
+ln -sf /gtbox/gtbox.sh /usr/bin/gtbox
