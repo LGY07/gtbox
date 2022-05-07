@@ -79,7 +79,7 @@ plugin-add () {
     CHECK_tar
     if [[ $(whoami) != "root" ]];then echo -e "\033[31mPermission denied\033[0m" & exit 1;fi
     #Check file
-    if test -f $1;then
+    if [[ $(tar -tf $1 | grep "plugin.cfg" | wc -l) -eq 1 ]];then
     ADD_PATH=$(tar -tf $1 | grep "plugin.cfg")
     tar -xf $1 -C ~/
     else exit 1
@@ -220,7 +220,11 @@ plugin-make () {
     echo "start-$MAKE_PKG_START">>$1/plugin.cfg
     echo "#$MAKE_PKG_OTHER">>$1/plugin.cfg
     tar -cJf $MAKE_PKG_NAME.tar.xz $1
+    if [[ $(tar -tf $MAKE_PKG_NAME.tar.xz | grep "plugin.cfg" | wc -l) -eq 1 ]];then
     return 0
+    else
+    rm -rf $MAKE_PKG_NAME.tar.xz
+    fi
 }
 
 ARGS () {
