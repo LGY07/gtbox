@@ -7,6 +7,7 @@ LESS_HELP () {
     echo "usage: $0 [options] COMMAND"
     echo ""
     echo "-h    --help      display a helpful usage message"
+    echo "-r    --run       run a tool without interactivity"
     echo ""
     echo "This is an interactive script,if no args are added, the default interaction mode."
     return 0
@@ -68,7 +69,7 @@ help () {
     echo "Make a plugin package"
     echo ""
     echo -e "\e[34mPlugin tools\e[0m"
-    cat /opt/gtbox/toollist
+    cat /gtbox/toollist
     echo ""
     return 0
 }
@@ -108,7 +109,7 @@ plugin-add () {
     PKG_START=$(grep "^start-" ~/$ADD_PATH | sed 's/start-//')
 
     #Check name
-    if [ $(grep "^$PKG_NAME" /opt/gtbox/startlist | wc -l) -eq 1 ];then
+    if [ $(grep "^$PKG_NAME" /gtbox/startlist | wc -l) -eq 1 ];then
     echo -e "\033[31mPlugin name duplication\033[0m" & exit 1
     fi
 
@@ -122,34 +123,34 @@ plugin-add () {
     exit 1
     fi
 
-    #Move to /opt/gtbox/
-    mkdir /opt/gtbox/$PKG_NAME
+    #Move to /gtbox/
+    mkdir /gtbox/$PKG_NAME
     cp ~/$1-cache /opt/$PKG_NAME
     rm -rf ~/$1-cache
 
     #Add to list
-    echo "$PKG_NAME#$PKG_INFO">>/opt/gtbox/toollist
-    echo "$PKG_NAME:$PKG_START">>/opt/gtbox/startlist
+    echo "$PKG_NAME#$PKG_INFO">>/gtbox/toollist
+    echo "$PKG_NAME:$PKG_START">>/gtbox/startlist
     return 0
 }
 
 plugin-remove () {
     echo -e "\e[34mRemove a plugin $1\e[0m"
     if [[ $(whoami) != "root" ]];then echo -e "\033[31mPermission denied\033[0m" & exit 1;fi
-    if [[ 1 -gt $(grep "^$1:" /opt/gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
+    if [[ 1 -gt $(grep "^$1:" /gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
     read -p "[Y/n]" TRUE_FALSE
     if [[ $TRUE_FALSE == "N" || $TRUE_FALSE == "n" ]];then exit 1
     else
-    rm -rf /opt/gtbox/$1
-    sed -i /^$1/d /opt/gtbox/startlist
-    sed -i /^$1/d /opt/gtbox/toollist
+    rm -rf /gtbox/$1
+    sed -i /^$1/d /gtbox/startlist
+    sed -i /^$1/d /gtbox/toollist
     fi
     return 0
 }
 
 plugin-update () {
     echo -e "\e[34mUpdate a plugin $1\e[0m"
-    if [[ 1 -gt $(grep "^$1:" /opt/gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
+    if [[ 1 -gt $(grep "^$1:" /gtbox/startlist | wc -l) ]];then echo "No such plugin" & exit 1;fi
     read -p "[Y/n]" TRUE_FALSE
     if [[ $TRUE_FALSE == "N" || $TRUE_FALSE == "n" ]];then exit 1
     else
@@ -167,7 +168,7 @@ plugin-make () {
     CHECK_tar
     echo -e "\e[36mMake a configuration file\e[0m"
     echo "Cautions:"
-    echo "1.Please note the path,the plugin will be installed to /opt/gtbox/[plugin name]/"
+    echo "1.Please note the path,the plugin will be installed to /gtbox/[plugin name]/"
     echo "2.Plugin's name preferably without special characters and spaces."
     echo "3.Introduction should be short"
     #Basic Information
@@ -205,8 +206,8 @@ plugin-make () {
     else MAKE_PKG_SHELL=bash
     fi
     #Start command
-    echo "The script start command (absolute path), should be in the /opt/gtbox/$MAKE_PKG_NAME/ directory"
-    echo "For example:bash /opt/gtbox/$MAKE_PKG_NAME/start.sh"
+    echo "The script start command (absolute path), should be in the /gtbox/$MAKE_PKG_NAME/ directory"
+    echo "For example:bash /gtbox/$MAKE_PKG_NAME/start.sh"
     read -p "Enter the start command:" MAKE_PKG_START
     #Other info
     echo "Enter some other information, such as the project URL"
@@ -234,6 +235,12 @@ ARGS () {
     else
     return 0
     fi
+    if [[ $1 == "--run" ]];then
+    $(echo $* | sed 's/--run //') & return 1
+    fi
+    if [[ $1 == "-r" ]];then
+    $(echo $* | sed 's/-r //') & return 1
+    fi
 }
 
 MAIN () {
@@ -242,8 +249,8 @@ MAIN () {
     do
     echo -e "\e[34mGrass!-Toolbox\e[0m"
     read -p "()" __RUN
-    if [[ $(grep "^$__RUN:" /opt/gtbox/startlist | wc -l) -eq 1 ]];then
-    $(grep "^$__RUN:" /opt/gtbox/startlist | sed s/$__RUN://)
+    if [[ $(grep "^$__RUN:" /gtbox/startlist | wc -l) -eq 1 ]];then
+    $(grep "^$__RUN:" /gtbox/startlist | sed s/$__RUN://)
     elif [[ $__RUN == "exit" ]]; 
     then echo -e "\033[31mGood bye!\033[0m" & __EXIT=1
     else
