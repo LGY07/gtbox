@@ -236,10 +236,16 @@ ARGS () {
     return 0
     fi
     if [[ $1 == "--run" ]];then
-    $(echo $* | sed 's/--run //') & return 1
+    $(echo $* | sed 's/--run //')
+    RETURN=$?
+    return 1
+    else return 0
     fi
     if [[ $1 == "-r" ]];then
-    $(echo $* | sed 's/-r //') & return 1
+    $(echo $* | sed 's/-r //')
+    RETURN=$?
+    return 1
+    else return 0
     fi
 }
 
@@ -250,7 +256,7 @@ MAIN () {
     echo -e "\e[34mGrass!-Toolbox\e[0m"
     read -p "()" __RUN
     if [[ $(grep "^$__RUN:" /gtbox/startlist | wc -l) -eq 1 ]];then
-    $(grep "^$__RUN:" /gtbox/startlist | sed s/$__RUN://)
+    $(grep "^$__RUN:" /gtbox/startlist | sed s/$__RUN://) $(echo $* | sed s/$__RUN //)
     elif [[ $__RUN == "exit" ]]; 
     then echo -e "\033[31mGood bye!\033[0m" & __EXIT=1
     else
@@ -261,6 +267,6 @@ MAIN () {
 }
 
 ARGS $*
-if [[ $? = 1 ]];then exit $?;fi
+if [[ $? = 1 ]];then exit $RETURN;fi
 echo "Enter help for help"
 MAIN
