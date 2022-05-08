@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# v1.0
+# v0.1-alpha
 
 LESS_HELP () {
     echo -e "\e[34mGrass!-Toolbox\e[0m"
@@ -261,6 +261,6 @@ MAIN () {
 }
 
 ARGS $*
-if [[ $? = 1 ]];then exit 0;fi
+if [[ $? = 1 ]];then exit $?;fi
 echo "Enter help for help"
 MAIN
