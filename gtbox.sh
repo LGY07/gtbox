@@ -48,6 +48,8 @@ done
 source $PLUGIN_PATH
 source $CFG_PATH/init/*
 
+if [[ $__CHECK == "ERROR" ]];then exit 1;fi
+
 ARGS_MODE $*
 if [[ $? -eq 2 ]];then exit 0;fi
 MAIN
