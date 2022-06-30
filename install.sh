@@ -1,7 +1,7 @@
 #!/bin/bash
 if test -e ./gbsh.tar;then
 tar -xf ./gbsh.tar
-cp -rf gbsh ~/gbsh
+cp -rf gbsh.tar ~/gbsh
 else
 mkdir ~/gbsh
 cd ~/gbsh
