@@ -1,6 +1,6 @@
 # Grass!Bash Shell
 
-Grass!Bash Shell，一个为`Linux`准备的工具箱你也可以在别的 Unix/Unix Like 系统使用
+Grass!Bash Shell，一个为`Linux`准备的工具箱,你也可以在别的 Unix/Unix Like 系统使用
 
 ## 一个不是完全没用的 Bash 脚本管理器
 
