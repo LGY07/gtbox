@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# v0.1-alpha
-
-GBSH_VERSION="v0.1-alpha"
-
 if test -e /etc/gbsh/gbsh.cfg
     then source /etc/gbsh/gbsh.cfg
     else source ~/gbsh/gbsh.cfg || exit 1

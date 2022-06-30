@@ -12,7 +12,7 @@ HELP_ARG() {
 }
 
 gbsh-help() {
-    echo "grass.[somepkg]           run a pkg]"
+    echo "grass.[somepkg]           run a pkg"
     echo ".make [somedir]           make a pkg"
     echo ".list                     list all pkgs"
     echo ".help [somepkg]           get help for a pkg"
