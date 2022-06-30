@@ -1,6 +1,6 @@
 #!/bin/bash
 #Grass! PKG Manager
-.make () {
+_make () {
     if test -d $1;then echo "Make a PKG";else echo "Can't find $1!"&exit 1;fi
     mkdir $CFG_PATH/cache/make.$1
     cp $1 $CFG_PATH/cache/make.$1
@@ -46,10 +46,10 @@
     mv $CFG_PATH/cache/"$MAKE_PKG_NAME".tar ~/"$MAKE_PKG_NAME".grass.tar && echo "Done! the pkg $MAKE_PKG_NAME is in ~/$MAKE_PKG_NAME"
     return 0
 }
-.install() {
+_install() {
     #clean
     rm -rf $CFG_PATH/cache/.load > /dev/null
-    rm -rf $CFG_PATH/cache/.install > /dev/null
+    rm -rf $CFG_PATH/cache/_install > /dev/null
     _INSTALL__SEC1_MAKE_PKG_NAME=
     _INSTALL__SEC1_MAKE_PKG_HELP=
     _INSTALL__SEC1_MAKE_PKG_DEPEND=
@@ -60,7 +60,7 @@
     _INSTALL__SEC1_MAKE_PKG_LAUNCHER=
     #load
     mkdir $CFG_PATH/cache/.load
-    mkdir $CFG_PATH/cache/.install
+    mkdir $CFG_PATH/cache/_install
     if [[ $(echo $1 | grep "^http" | wc -l) -eq 1 ]];then
     echo "Install a pkg online!"
     __PWD=$(pwd)
@@ -74,17 +74,17 @@
     echo "Can't find $1!" & exit 1
     fi
     ini_Path=$(tar -tf $(ls) | grep /pkg.ini$)
-    tar -xf $(ls) -C $CFG_PATH/cache/.install
-    cd $CFG_PATH/cache/.install
+    tar -xf $(ls) -C $CFG_PATH/cache/_install
+    cd $CFG_PATH/cache/_install
     rm -rf $CFG_PATH/cache/.load
     INI_Read $CFG_PATH/cache/.load/$ini_Path INSTALL
-    CACHE_Path=$CFG_PATH/cache/.install/$(ls)
+    CACHE_Path=$CFG_PATH/cache/_install/$(ls)
     cd $__PWD
     #Install
     mkdir $CFG_PATH/pkgs/$_INSTALL__SEC1_MAKE_PKG_NAME
     cp $CACHE_Path/* $CFG_PATH/pkgs/$_INSTALL__SEC1_MAKE_PKG_NAME/*
     ln $CFG_PATH/pkgs/$_INSTALL__SEC1_MAKE_PKG_NAME/$_INSTALL__SEC1_MAKE_PKG_LAUNCHER $CFG_PATH/pkgs_path/grass.$_INSTALL__SEC1_MAKE_PKG_NAME
-    rm -rf $CFG_PATH/cache/.install
+    rm -rf $CFG_PATH/cache/_install
     echo '['$(New-Guid)']'>$CFG_PATH/pkgs/$_INSTALL__SEC1_MAKE_PKG_NAME/pkg.ini
     echo $MAKE_PKG_NAME>>$CFG_PATH/pkgs/$_INSTALL__SEC1_MAKE_PKG_NAME/pkg.ini
     echo $MAKE_PKG_LAUNCHER>>$CFG_PATH/pkgs/$_INSTALL__SEC1_MAKE_PKG_NAME/pkg.ini
@@ -96,7 +96,7 @@
     echo $MAKE_PKG_URL>>$CFG_PATH/pkgs/$_INSTALL__SEC1_MAKE_PKG_NAME/pkg.ini
     return 0
 }
-.remove() {
+_remove() {
     if [[ $(ls -l $CFG_PATH/pkgs | grep " $1$") -eq 1 ]]
     then echo "Remove $1!"
     else echo "Can't find $1!" & exit 1
@@ -105,7 +105,7 @@
     rm -rf $CFG_PATH/pkgs/$1
     return 0
 }
-.update() {
+_update() {
     if [[ $(ls -l $CFG_PATH/pkgs | grep " $1$") -eq 1 ]]
     then echo "Update $1!"
     else echo "Can't find $1!" & exit 1
@@ -122,26 +122,26 @@
     curl -LO $_UPDATE__SEC1_MAKE_PKG_URL
     if [[ $? -eq 0 ]];then : ;else echo "Can't download $1!" & exit 1;fi
     __Updatepkg=$CFG_PATH/cache/download/$(ls $CFG_PATH/cache/download)
-    .remove $1
-    .install __Updatepkg
+    _remove $1
+    _install __Updatepkg
     if [[ $? -eq 0 ]];then
     echo "Update $1 successfully!"
     return 0
     else echo "Fail to update $1!"
     return 1
 }
-.update-all() {
+_update-all() {
     rm -f $CFG_PATH/cache/update.txt>/dev/null
     ls -1 $CFG_PATH/pkgs/>$CFG_PATH/cache/update.txt
     for UPDATENAME in $CFG_PATH/cache/update.txt
     do
-    .update $UPDATENAME
+    _update $UPDATENAME
     return %?
     done
     rm -f $CFG_PATH/cache/update.txt
     return 0
 }
-.list() {
+_list() {
     ls -1 $CFG_PATH/pkgs/
     return 0
 }

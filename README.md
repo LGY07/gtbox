@@ -32,15 +32,15 @@ chmod +x install.sh
 在脚本交互模式中：
 
 ```
-.grass.[包名]               运行一个脚本包
-.make [目录]                制作一个脚本包
-.list                      显示所有已安装的脚本包
-.help [包名]                获取脚本包的帮助文件
-.install [包路径/链接]       安装脚本包
-.remove [包名]              移除脚本包
-.update [包名]              更新脚本包
-.update-all                 更新所有脚本包
-.upgrade                    更新脚本包管理器
-.plugin add [脚本文件]       添加插件
-.plugin del [脚本文件]       删除插件
+grass.[包名]               运行一个脚本包
+_make [目录]                制作一个脚本包
+_list                      显示所有已安装的脚本包
+_help [包名]                获取脚本包的帮助文件
+_install [包路径/链接]       安装脚本包
+_remove [包名]              移除脚本包
+_update [包名]              更新脚本包
+_update-all                 更新所有脚本包
+_upgrade                    更新脚本包管理器
+_plugin add [脚本文件]       添加插件
+_plugin del [脚本文件]       删除插件
 ```

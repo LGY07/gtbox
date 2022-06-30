@@ -1,5 +1,5 @@
 #!/bin/bash
-.upgrade() {
+_upgrade() {
     if [[ $(curl -L https://blog.lgy07.me/gtbox/$RELEASES/version.txt) != $VERSION ]];then
     mkdir $CFG_PATH/cache/upgrade
     __PWD=$(pwd)
@@ -14,7 +14,7 @@
     .clean
     return 0
 }
-.clean() {
+_clean() {
     rm -rf $CFG_PATH/cache/*>/dev/null
     rm -f $CFG_PATH/cache/*>/dev/null
 }

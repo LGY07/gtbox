@@ -31,8 +31,8 @@ __EXIT=0
 while [[ $__EXIT -eq 0 ]]
 do
     if [[ $(whoami) == "root" ]];
-    then __WHO="[root@$(hostname) $(pwd)]-GrassShell#"
-    else __WHO="[$(whoami)@$(hostname) $(pwd)]-GrassShell$"
+    then __WHO="[root@$(cat /etc/hostname) $(pwd)]-GrassShell#"
+    else __WHO="[$(whoami)@$(cat /etc/hostname) $(pwd)]-GrassShell$"
     fi
         echo -e "\033[32mGrass-Bash!!!\033[0m"
         read -p "$__WHO"  __RUN

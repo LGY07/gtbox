@@ -13,19 +13,19 @@ HELP_ARG() {
 
 gbsh-help() {
     echo "grass.[somepkg]           run a pkg"
-    echo ".make [somedir]           make a pkg"
-    echo ".list                     list all pkgs"
-    echo ".help [somepkg]           get help for a pkg"
-    echo ".install [pkgfile/url]    install a pkg"
-    echo ".remove [somepkg]         remove a pkg"
-    echo ".update [somepkg]         update a pkg"
-    echo ".update-all               update all pkgs"
-    echo ".upgrade                  update the GrassBashShell"
-    echo ".plugin add [somescript]  add a plugin"
-    echo ".plugin del [somescript]  delete a plugin"
+    echo "_make [somedir]           make a pkg"
+    echo "_list                     list all pkgs"
+    echo "_help [somepkg]           get help for a pkg"
+    echo "_install [pkgfile/url]    install a pkg"
+    echo "_remove [somepkg]         remove a pkg"
+    echo "_update [somepkg]         update a pkg"
+    echo "_update-all               update all pkgs"
+    echo "_upgrade                  update the GrassBashShell"
+    echo "_plugin add [somescript]  add a plugin"
+    echo "_plugin del [somescript]  delete a plugin"
 }
 
-.help() {
+_help() {
     if [[ $(ls -l $CFG_PATH/pkgs | grep " $1$") -eq 1 ]];then
     _HELP__SEC1_MAKE_PKG_HELP=
     INI_Read $CFG_PATH/pkgs/$1/pkg.ini HELP
