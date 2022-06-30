@@ -15,4 +15,4 @@ curl -LO https://blog.lgy07.me/gtbox/lts/init.tar
 tar -xf init.tar
 rm init.tar
 fi
-sudo chmod +x ~/gbsh/gtbox.sh ; sudo ln -sf ~/gtbox.sh /usr/bin/gtbox
+sudo chmod +x ~/gbsh ; sudo chmod +x ~/gbsh/gtbox.sh ; sudo ln -sf ~/gtbox.sh /usr/bin/gtbox

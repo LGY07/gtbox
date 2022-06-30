@@ -26,7 +26,7 @@ ARGS_MODE() {
     esac
 }
 MAIN() {
-echo 'Type gbsh-help for help onlone.'
+echo 'Type gbsh-help for help.'
 __EXIT=0
 while [[ $__EXIT -eq 0 ]]
 do
