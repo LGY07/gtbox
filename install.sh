@@ -1,7 +1,9 @@
 #!/bin/bash
 if test -e ./gbsh.tar;then
+mv ./gbsh.tar ~/gbsh.cache
+cd ~/
+mv ./gbsh.cache ./gbsh.tar
 tar -xf ./gbsh.tar
-cp -rf gbsh.tar ~/gbsh
 else
 mkdir ~/gbsh
 cd ~/gbsh
@@ -14,6 +16,6 @@ mkdir plugins
 curl -LO https://blog.lgy07.me/gtbox/lts/init.tar
 tar -xf init.tar
 rm init.tar
-echo '#!/bin/bash'>~/gbsh/plugins/null.sh
 fi
-sudo chmod +x ~/gbsh ; sudo chmod +x ~/gbsh/gtbox.sh ; sudo ln -sf ~/gtbox.sh /usr/bin/gtbox
+echo '#!/bin/bash'>~/gbsh/plugins/null.sh
+sudo chmod 751 ~/gbsh ; sudo ln -sf ~/gtbox.sh /usr/bin/gtbox
