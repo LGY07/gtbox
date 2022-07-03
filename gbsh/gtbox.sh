@@ -5,7 +5,11 @@ if test -e /etc/gbsh/gbsh.cfg
     else source ~/gbsh/gbsh.cfg || exit 1
 fi
 
-source $CFG_PATH/init/*
+_INITS=( $(ls -1 $CFG_PATH) )
+for _INIT in ${_INITS}
+do
+source $CFG_PATH/init/$_INIT
+done
 
 ARGS_MODE() {
     case $1 in
@@ -45,8 +49,17 @@ do
 done
 }
 
-source $PLUGIN_PATH
-source $CFG_PATH/init/*
+_PLUGINS=( $(ls -1 $PLUGIN_PATH) )
+for _PLUGIN in ${_PLUGINS}
+do
+source $PLUGIN_PATH/_PLUGIN
+done
+
+_INITS=( $(ls -1 $CFG_PATH) )
+for _INIT in ${_INITS}
+do
+source $CFG_PATH/init/$_INIT
+done
 
 if [[ $__CHECK == "ERROR" ]];then exit 1;fi
 

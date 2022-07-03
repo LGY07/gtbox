@@ -5,7 +5,11 @@ if test -e /etc/gbsh/gbsh.cfg
     else source ~/gbsh/gbsh.cfg || exit 1
 fi
 
-source $CFG_PATH/init/*
+_INITS=( $(ls -1 $CFG_PATH) )
+for _INIT in ${_INITS}
+do
+source $CFG_PATH/init/$_INIT
+done
 
 ARGS_MODE() {
     case $1 in
@@ -26,13 +30,13 @@ ARGS_MODE() {
     esac
 }
 MAIN() {
-echo 'Type gbsh-help for help onlone.'
+echo 'Type gbsh-help for help.'
 __EXIT=0
 while [[ $__EXIT -eq 0 ]]
 do
     if [[ $(whoami) == "root" ]];
-    then __WHO="[root@$(hostname) $(pwd)]-GrassShell#"
-    else __WHO="[$(whoami)@$(hostname) $(pwd)]-GrassShell$"
+    then __WHO="[root@$(cat /etc/hostname) $(pwd)]-GrassShell#"
+    else __WHO="[$(whoami)@$(cat /etc/hostname) $(pwd)]-GrassShell$"
     fi
         echo -e "\033[32mGrass-Bash!!!\033[0m"
         read -p "$__WHO"  __RUN
@@ -45,8 +49,17 @@ do
 done
 }
 
-source $PLUGIN_PATH
-source $CFG_PATH/init/*
+_PLUGINS=( $(ls -1 $PLUGIN_PATH) )
+for _PLUGIN in ${_PLUGINS}
+do
+source $PLUGIN_PATH/_PLUGIN
+done
+
+_INITS=( $(ls -1 $CFG_PATH) )
+for _INIT in ${_INITS}
+do
+source $CFG_PATH/init/$_INIT
+done
 
 if [[ $__CHECK == "ERROR" ]];then exit 1;fi
 
